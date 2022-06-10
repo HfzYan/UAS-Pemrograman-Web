@@ -4,16 +4,22 @@ require '../helper/Koneksi.php';
 require '../model/KatalogModel.php';
 require '../helper/Model.php';
 
-isLogin("HalamanLog.php");
-$data = ambilDataLog($koneksi);
+isLogin("HalamanHome.php");
+$koneksi = mysqli_connect('localhost', 'root', '', 'minimarket');
+$data = ambilBarang($koneksi);
+$dataInfo = ambilInfoBarang($koneksi);
 
+if (isset($_POST['btn_tambah'])) {
+    tambahbarang($_POST['nama'], $_POST['gambar'], $_POST['stok'], $_POST['nama_kategori'], $koneksi);
+    unset($_POST['btn_tambah']);
+}
 ?>
 
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Log User</title>
+    <title>Alam Admin</title>
     <link rel="stylesheet" type="text/css" href="../css/PageStyle2.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
@@ -35,7 +41,7 @@ $data = ambilDataLog($koneksi);
         <div class="main_content">
             <div class="header1">
 
-                <b class="judul">Log User</b>
+                <b class="judul">Form Input Katalog</b>
 
 
                 <b class="admin"><?php echo $_SESSION["username"] ?></b>
@@ -44,33 +50,33 @@ $data = ambilDataLog($koneksi);
                 </a>
 
             </div>
-
-
-            <table class="content-table" data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">
-                <thead>
+            
+            <form method="post" class="form">
+                <table class='table table-hover table-responsive table-bordered'>
+                <tr>
+                    <td>NAMA</td>
+                    <td><input type="text" class="form-control" name="nama_barang" id="id_info_barang" required /></td>
+                </tr>
+                <tr>
+                    <td>GAMBAR</td>
+                    <td><input type="file" name="gambar" required /></td>
+                </tr>
+                <tr>
+                    <td>STOK</td>
+                    <td><input type="text" class="form-control" name="stok" id="id_info_barang" required /></td>
+                </tr>
                     <tr>
-                        <th>NO</th>
-                        <th>NAMA</th>
-                        <th>AKSI</th>
-                        <th>TANGGAL/WAKTU</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $nomor = 1; ?>
-                    <?php foreach ($data as $data) : ?>
-                        <tr>
-                            <?php $nama = ambilNamaUser($koneksi, $data['id_user']) ?>
+                    <td>KATEGORI</td>
+                    <td><input type="text" class="form-control" name="nama_kategori" id="id_kategori" required /></td>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button type="submit" class="btn btn-success" name="btn_tambah">Simpan</button></td>
+                </tr>
+                </table>
+            </form>
 
-                            <td width="3%"><?php echo $nomor ?></td>
-                            <td width="20%"><?php echo $nama ?></td>
-                            <td width="40%"><?php echo $data['aksi'] ?></td>
-                            <td><?php echo $data['tanggal'] ?></td>
-                        </tr>
-                        <?php $nomor++; ?>
-                    <?php endforeach ?>
-
-                </tbody>
-            </table>
             <br><br>
         </div>
     </div>
